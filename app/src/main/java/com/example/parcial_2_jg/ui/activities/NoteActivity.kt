@@ -3,6 +3,7 @@ package com.example.parcial_2_jg.ui.activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.MultiAutoCompleteTextView
@@ -16,6 +17,7 @@ class NoteActivity : AppCompatActivity() {
     private lateinit var noteViewModel: NoteViewModels
     lateinit var inp_title: TextView
     lateinit var inp_content: TextView
+    private val tag = "NoteActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +28,16 @@ class NoteActivity : AppCompatActivity() {
         inp_title=findViewById(R.id.title_note_final)
         inp_content=findViewById(R.id.contenido_note_final)
 
-        val id_note = intent.getLongExtra("id_note", 0L)
+        val id_note = intent.getIntExtra("id_note", 0)
+
+        noteViewModel.byIdNote.observe(this){note->
+            Log.d(tag, "Nota: $note")
+            inp_title.text = note.title
+            inp_content.text = note.content
+        }
+
+        noteViewModel.getNoteById(id_note)
+
         intent.getStringExtra("title")?.let {
             inp_title.setText(it)
         }

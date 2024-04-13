@@ -19,6 +19,13 @@ class NoteRepository (context: Context) {
         }
     }
 
+    suspend fun getNoteById(id: Int): Call<NoteModel> {
+        return withContext(Dispatchers.IO){
+            //database.noteDao().getNoteById(id)
+            apiClient.noteById(id)
+        }
+    }
+
     /*
     suspend fun insertNote(note:NoteModel){
         withContext(Dispatchers.IO){

@@ -20,6 +20,10 @@ class NoteViewModels(application: Application):AndroidViewModel(application){
     val noteList: MutableLiveData<List<NoteModel>>
         get() = _noteList
 
+    private val _byIdNote = MutableLiveData<NoteModel>()
+    val byIdNote: MutableLiveData<NoteModel>
+        get() = _byIdNote
+
     fun getNotes(){
         viewModelScope.launch {
             val note = noteRepository.getNotes().enqueue(object : Callback<List<NoteModel>> {
@@ -36,6 +40,25 @@ class NoteViewModels(application: Application):AndroidViewModel(application){
                 }
             })
         }
+    }
+
+    fun getNoteById(id: Int){
+        viewModelScope.launch {
+            val note = noteRepository.getNoteById(id).enqueue(object : Callback<NoteModel> {
+                override fun onResponse(call: Call<NoteModel>, response: Response<NoteModel>) {
+                    if (response.isSuccessful) {
+                        _byIdNote.value = response.body()
+                    }else{
+                        Log.e("NoteViewModel", "Error: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<NoteModel>, t: Throwable) {
+                    Log.d("Error", t.message.toString())
+                }
+            })
+        }
+
     }
 
     /*

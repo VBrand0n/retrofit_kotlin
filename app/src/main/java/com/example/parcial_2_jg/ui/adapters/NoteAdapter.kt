@@ -49,6 +49,7 @@ class NoteAdapter (private val notes:List<NoteModel>, private val noteViewModel:
 
         holder.itemView.setOnClickListener {
             val intent = Intent(it.context, NoteActivity::class.java)
+
             intent.putExtra("id_note", note.id)
             intent.putExtra("title", note.title)
             intent.putExtra("contenido", note.content)
